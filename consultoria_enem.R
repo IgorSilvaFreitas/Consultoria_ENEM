@@ -35,11 +35,12 @@ setwd("C:/Users/Igor/Documents/GitHub/Consultoria_ENEM")
 #          MT= as.numeric(MT),
 #          FORMULA= (2*R + CNT + 2*CHT + LCT + MT)/7)
 
-# dados <- na.omit(dados)
+#dados <- na.omit(dados)
 # write.csv(dados,'ENEM_dados.csv')
-
-
-dados <- read_csv('ENEM_dados.csv')
+# 
+# 
+# dados <- read_csv('ENEM_dados.csv')
+# dados <- dados[,-1]
 ####A0 ou B, ampla conc = 
 ####L1 ou A1, renda <= 1,5 SM e EM cursado em EP
 ####L2 ou A2, renda <= 1,5 SM, RACA sendo parda, indigena e preta e EM cursado em EP
@@ -76,3 +77,4 @@ for (i in 1:dim(dados)[1]){
   }
 
 }
+write.csv(dados,'dados_consultoria.csv')
