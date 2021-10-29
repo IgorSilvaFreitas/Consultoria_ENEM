@@ -62,10 +62,11 @@ for (i in 1:dim(dados)[1]){
     if (dados$RACA[i]==c(2, 3, 5)){
       dados$A6[i] <- 1
       dados$A1[i] <- 0
+      dados$A7[i] <- 1
       dados$B[i] <- 0
     }else {
-      dados$A6[i] <- 0
-      dados$A7[i] <- 1
+      dados$A6[i] <- 1
+      dados$A7[i] <- 0
       dados$B[i] <- 0
     }
   }else{
@@ -77,4 +78,8 @@ for (i in 1:dim(dados)[1]){
   }
 
 }
-write.csv(dados,'dados_consultoria.csv')
+write.csv(dados,'dados_ENEM.csv')
+save(dados, file='dados_consultoria.csv')
+
+
+dados <- read_csv('dados_consultoria.csv')
