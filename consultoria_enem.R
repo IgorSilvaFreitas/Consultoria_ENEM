@@ -47,39 +47,41 @@ setwd("C:/Users/Igor/Documents/GitHub/Consultoria_ENEM")
 ####L5 ou A6, enda > 1,5 SM e EM cursado em EP
 ####L6 ou A7, renda > 1,5 SM , RACA sendo parda, indigena e preta e EM cursado em EP
 
-for (i in 1:dim(dados)[1]){
-  if (dados$RENDA[i]==c("A","B","C") & dados$EM[i]=="A"){
-    if (dados$RACA[i]==c(2, 3, 5)){
-      dados$A2[i] <- 1
-      dados$A1[i] <- 1
-      dados$B[i] <- 0
-    }else {
-      dados$A2[i] <- 0
-      dados$A1[i] <- 1
-      dados$B[i] <- 0
-      }
-  }else if (dados$RENDA[i]!=c("A","B","C") & dados$EM[i]=="A") {
-    if (dados$RACA[i]==c(2, 3, 5)){
-      dados$A6[i] <- 1
-      dados$A1[i] <- 0
-      dados$A7[i] <- 1
-      dados$B[i] <- 0
-    }else {
-      dados$A6[i] <- 1
-      dados$A7[i] <- 0
-      dados$B[i] <- 0
-    }
-  }else{
-    dados$B[i] <- 1
-    dados$A6[i] <- 0
-    dados$A7[i] <- 0
-    dados$A2[i] <- 0
-    dados$A1[i] <- 0
-  }
+# for (i in 1:dim(dados)[1]){
+#   if (dados$RENDA[i]==c("A","B","C") & dados$EM[i]=="A"){
+#     if (dados$RACA[i]==c(2, 3, 5)){
+#       dados$A2[i] <- 1
+#       dados$A1[i] <- 1
+#       dados$B[i] <- 0
+#     }else {
+#       dados$A2[i] <- 0
+#       dados$A1[i] <- 1
+#       dados$B[i] <- 0
+#       }
+#   }else if (dados$RENDA[i]!=c("A","B","C") & dados$EM[i]=="A") {
+#     if (dados$RACA[i]==c(2, 3, 5)){
+#       dados$A6[i] <- 1
+#       dados$A1[i] <- 0
+#       dados$A7[i] <- 1
+#       dados$B[i] <- 0
+#     }else {
+#       dados$A6[i] <- 1
+#       dados$A7[i] <- 0
+#       dados$B[i] <- 0
+#     }
+#   }else{
+#     dados$B[i] <- 1
+#     dados$A6[i] <- 0
+#     dados$A7[i] <- 0
+#     dados$A2[i] <- 0
+#     dados$A1[i] <- 0
+#   }
+# 
+# }
+# write.csv(dados,'dados_ENEM.csv')
 
-}
-write.csv(dados,'dados_ENEM.csv')
-save(dados, file='dados_consultoria.csv')
+
+dados <- read_csv('dados_ENEM.csv')
+dados <- dados[,-c(1,2)]
 
 
-dados <- read_csv('dados_consultoria.csv')
