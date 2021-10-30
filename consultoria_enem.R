@@ -84,4 +84,26 @@ setwd("C:/Users/Igor/Documents/GitHub/Consultoria_ENEM")
 dados <- read_csv('dados_ENEM.csv')
 dados <- dados[,-c(1,2)]
 
+################################################################################################
+#raça
+dados$RACA<- ordered(dados$RACA,levels=c(0,1,2,3,4,5,6),
+                     labels=c("Não Declarado","Branco","Preta","Parda","Amarela","Indígina","Não dispõe da informação"))
+#sexo
+dados$SEXO<- ordered(dados$SEXO,levels=c("M","F"),
+                     labels=c("Masculino","Feminino"))
+#escola
+dados$ESCOLA <-ordered(dados$ESCOLA,levels=c(1,2,3,4),
+                       labels=c("Não Respondeu","Pública","Privada","Exterior"))#escolaridade da mãe
+# #trabalho
+# dados$TRAB <-ordered(dados$TRAB,levels=c("A","B","C"),
+#                           labels=c("Não, nunca trabalhei.","Sim, já trabalhei, mas não estou trabalhando.","Sim, estou trabalhando."))
+# #escolaridade da mãe
+# dados$ESCOL_MAE <-ordered(dados$ESCOL_MAE,levels=c("A","B","C","D","E","F","G","H"),
+#                        labels=c("Nunca estudou.","Não completou a 4ª série/5º ano do Ensino Fundamental.","Completou a 4ª série/5º ano, mas não completou a 8ª série/9º ano do Ensino Fundamental.","Completou a 8ª série/9º ano do Ensino Fundamental, mas não completou o Ensino Médio.","Completou o Ensino Médio, mas não completou a Faculdade.","Completou a Faculdade, mas não completou a Pós-graduação.","Completou a Pós-graduação.","Não sei."))
+# #renda
+# dados$RENDA <-ordered(dados$RENDA,levels=c("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"),
+#                           labels=c("Nenhuma renda.","Até R$ 880,00.","De R$ 880,01 até R$ 1.320,00.","De R$ 1.320,01 até R$ 1.760,00.","De R$ 1.760,01 até R$ 2.200,00.","De R$ 2.200,01 até R$ 2.640,00.","De R$ 2.640,01 até R$ 3.520,00.","De R$ 3.520,01 até R$ 4.400,00.","De R$ 4.400,01 até R$ 5.280,00.","De R$ 5.280,01 até R$ 6.160,00.","De R$ 6.160,01 até R$ 7.040,00.","De R$ 7.040,01 até R$ 7.920,00.","De R$ 7.920,01 até R$ 8.800,00.","De R$ 8.800,01 até R$ 10.560,00.","De R$ 10.560,01 até R$ 13.200,00.","De R$ 13.200,01 até R$ 17.600,00.","Mais de R$ 17.600,00."))
+# #escola em que cursou o ensino médio
+# dados$EM <-ordered(dados$EM,levels=c("A","B","C","D","E"),
+#                       labels=c("Somente em escola pública.","Parte em escola pública e parte em escola privada sem bolsa de estudo integral.","Parte em escola pública e parte em escola privada com bolsa de estudo integral.","Somente em escola privada sem bolsa de estudo integral.","Somente em escola privada com bolsa de estudo integral."))
 
