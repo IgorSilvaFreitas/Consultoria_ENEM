@@ -106,3 +106,52 @@ dados <- dados[,-c(1,2)]
 # dados$EM <-ordered(dados$EM,levels=c("A","B","C","D","E"),
 #                       labels=c("Somente em escola pública.","Parte em escola pública e parte em escola privada sem bolsa de estudo integral.","Parte em escola pública e parte em escola privada com bolsa de estudo integral.","Somente em escola privada sem bolsa de estudo integral.","Somente em escola privada com bolsa de estudo integral."))
 
+
+load("dados_enem.RData")
+base <- base_enem
+## Criando grupos para classificar a classe de concorrência
+
+base$indicador <- seq(from=1, to=length(base$RACA),by=1)
+
+A1.1 <- filter(base, RENDA %in% c("A","B","C"),
+               EM == "A")
+A1.1 <- mutate(A1.1, A1=1)
+A1.2 <- filter(base, !indicador %in% A1.1$indicador) 
+A1.2 <- mutate(A1.2, A1=0)
+
+base <- rbind(A1.1,A1.2)
+#---------------------------------------------------------------
+A2.1 <- filter(base, RENDA %in% c("A","B","C"),
+               EM == "A",
+               RACA %in% c(2, 3, 5)) 
+A2.1 <- mutate(A2.1, A2=1)
+A2.2 <- filter(base, !indicador %in% A2.1$indicador) 
+A2.2 <- mutate(A2.2, A2=0)
+
+base <- rbind(A2.1,A2.2)
+#---------------------------------------------------------------
+A6.1 <- filter(base, !RENDA %in% c("A","B","C"),
+               EM == "A")
+A6.1 <- mutate(A6.1, A6=1)
+A6.2 <- filter(base, !indicador %in% A6.1$indicador)
+A6.2 <- mutate(A6.2, A6=0)
+
+base <- rbind(A6.1,A6.2)
+#---------------------------------------------------------------
+A7.1 <- filter(base, !RENDA %in% c("A","B","C"),
+               EM == "A",
+               RACA %in% c(2, 3, 5))
+A7.1 <- mutate(A7.1, A7=1)
+A7.2 <- filter(base, !indicador %in% A7.1$indicador)
+A7.2 <- mutate(A7.2, A7=0)
+base <- rbind(A7.1,A7.2)
+#---------------------------------------------------------------
+B.1 <- filter(base, EM != "A")
+B.1 <- mutate(B.1, B=1)
+
+B.2 <- filter(base, EM == "A")
+B.2 <- mutate(B.2, B=0)
+
+base <- rbind(B.1,B.2)
+#---------------------------------------------------------------
+base <- arrange(base, by=indicador)
