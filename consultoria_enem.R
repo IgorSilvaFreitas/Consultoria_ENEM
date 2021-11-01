@@ -106,7 +106,7 @@ dados <- dados[,-c(1,2)]
 # dados$EM <-ordered(dados$EM,levels=c("A","B","C","D","E"),
 #                       labels=c("Somente em escola pública.","Parte em escola pública e parte em escola privada sem bolsa de estudo integral.","Parte em escola pública e parte em escola privada com bolsa de estudo integral.","Somente em escola privada sem bolsa de estudo integral.","Somente em escola privada com bolsa de estudo integral."))
 
-
+setwd("C:/Users/Igor/Documents/GitHub/Consultoria_ENEM")
 load("dados_enem.RData")
 base <- base_enem
 ## Criando grupos para classificar a classe de concorrência
@@ -177,3 +177,127 @@ b1na <- base |> filter(!indicador %in% b1aux$indicador) |>
   mutate(Situação_B.1='Não aprovado')
 
 base <- rbind(b1aux,b1na)
+#------------------------------------------------------------------------------
+A1.1ap <- base |> filter(A1==1, A2==0, FORMULA >= 635.91, R>=300, CNT>=300,CHT>=350,
+                       LCT>=300, MT>=250) |> 
+  mutate(Situação_A1.1='Aprovado')
+
+A1.1nc <- base |> filter(A1==0) |> mutate(Situação_A1.1='Não concorreu')
+
+A1.1aux <- rbind(A1.1ap,A1.1nc)
+
+A1.1na <- base |> filter(!indicador %in% A1.1aux$indicador) |> 
+  mutate(Situação_A1.1='Não aprovado')
+
+base <- rbind(A1.1aux,A1.1na)
+#------------------------------------------------------------------------------
+A2.1ap <- base |> filter(A2==1, FORMULA >= 620.97, R>=300, CNT>=300,CHT>=350,
+                         LCT>=300, MT>=250) |> 
+  mutate(Situação_A2.1='Aprovado')
+
+A2.1nc <- base |> filter(A2==0) |> mutate(Situação_A2.1='Não concorreu')
+
+A2.1aux <- rbind(A2.1ap,A2.1nc)
+
+A2.1na <- base |> filter(!indicador %in% A2.1aux$indicador) |> 
+  mutate(Situação_A2.1='Não aprovado')
+
+base <- rbind(A2.1aux,A2.1na)
+#------------------------------------------------------------------------------
+A6.1ap <- base |> filter(A6==1, A7==0, FORMULA >= 654.47, R>=300, CNT>=300,CHT>=350,
+                         LCT>=300, MT>=250) |> 
+  mutate(Situação_A6.1='Aprovado')
+
+A6.1nc <- base |> filter(A6==0) |> mutate(Situação_A6.1='Não concorreu')
+
+A6.1aux <- rbind(A6.1ap,A6.1nc)
+
+A6.1na <- base |> filter(!indicador %in% A6.1aux$indicador) |> 
+  mutate(Situação_A6.1='Não aprovado')
+
+base <- rbind(A6.1aux,A6.1na)
+#------------------------------------------------------------------------------
+A7.1ap <- base |> filter(A7==1, FORMULA >= 629.21, R>=300, CNT>=300,CHT>=350,
+                         LCT>=300, MT>=250) |> 
+  mutate(Situação_A7.1='Aprovado')
+
+A7.1nc <- base |> filter(A7==0) |> mutate(Situação_A7.1='Não concorreu')
+
+A7.1aux <- rbind(A7.1ap,A7.1nc)
+
+A7.1na <- base |> filter(!indicador %in% A7.1aux$indicador) |> 
+  mutate(Situação_A7.1='Não aprovado')
+
+base <- rbind(A7.1aux,A7.1na)
+#------------------------------------------------------------------------------
+## B.2- 2º período
+B.2ap <- base |> filter(B.2==1, FORMULA >= 625.81, R>=300, CNT>=300,CHT>=350,
+                        LCT>=300, MT>=250) |> 
+  mutate(Situação_B.2='Aprovado')
+
+B.2nc <- base |> filter(B.2==0) |> mutate(Situação_B.2='Não concorreu')
+
+B.2aux <- rbind(B.2ap,B.2nc)
+
+B.2na <- base |> filter(!indicador %in% B.2aux$indicador) |> 
+  mutate(Situação_B.2='Não aprovado')
+
+base <- rbind(B.2aux,B.2na)
+#------------------------------------------------------------------------------
+## A1.2- 2º período
+A1.2ap <- base |> filter(A1.2=='Não aprovado', A1==1, A2==0, FORMULA >= 612.20, R>=300, CNT>=300,CHT>=350,
+                         LCT>=300, MT>=250) |> 
+  mutate(Situação_A1.2='Aprovado')
+
+A1.2nc <- base |> filter(A1==0) |> mutate(Situação_A1.2='Não concorreu')
+
+A1.2aux <- rbind(A1.2ap,A1.2nc)
+
+A1.2na <- base |> filter(!indicador %in% A1.2aux$indicador) |> 
+  mutate(Situação_A1.2='Não aprovado')
+
+base <- rbind(A1.2aux,A1.2na)
+#------------------------------------------------------------------------------
+## A2.2- 2º período
+A2.2ap <- base |> filter(A2.2==1, FORMULA >= 588.24, R>=300, CNT>=300,CHT>=350,
+                         LCT>=300, MT>=250) |> 
+  mutate(Situação_A2.2='Aprovado')
+
+A2.2nc <- base |> filter(A2.2==0) |> mutate(Situação_A2.2='Não concorreu')
+
+A2.2aux <- rbind(A2.2ap,A2.2nc)
+
+A2.2na <- base |> filter(!indicador %in% A2.2aux$indicador) |> 
+  mutate(Situação_A2.2='Não aprovado')
+
+base <- rbind(A2.2aux,A2.2na)
+#------------------------------------------------------------------------------
+A6.2ap <- base |> filter(A6.2==1, FORMULA >= 619.39, R>=300, CNT>=300,CHT>=350,
+                         LCT>=300, MT>=250) |> 
+  mutate(Situação_A6.2='Aprovado')
+
+A6.2nc <- base |> filter(A6.2==0) |> mutate(Situação_A6.2='Não concorreu')
+
+A6.2aux <- rbind(A6.2ap,A6.2nc)
+
+A6.2na <- base |> filter(!indicador %in% A6.2aux$indicador) |> 
+  mutate(Situação_A6.2='Não aprovado')
+
+base <- rbind(A6.2aux,A6.2na)
+#------------------------------------------------------------------------------
+## A7.2- 2º período
+A7.2ap <- base |> filter(A7.2==1, FORMULA >= 586.84, R>=300, CNT>=300,CHT>=350,
+                         LCT>=300, MT>=250) |> 
+  mutate(Situação_A7.2='Aprovado')
+
+A7.2nc <- base |> filter(A7.2==0) |> mutate(Situação_A7.2='Não concorreu')
+
+A7.2aux <- rbind(A7.2ap,A7.2nc)
+
+A7.2na <- base |> filter(!indicador %in% A7.2aux$indicador) |> 
+  mutate(Situação_A7.2='Não aprovado')
+
+base <- rbind(A7.2aux,A7.2na)
+#############################################################
+
+rm(list=setdiff(ls(), "base"))
