@@ -235,7 +235,7 @@ B.2ap <- base |> filter(Situação_B.1=='Não aprovado', B==1, FORMULA >= 625.81
                         LCT>=300, MT>=250) |> 
   mutate(Situação_B.2='Aprovado')
 
-B.2nc <- base |> filter(B.2==0) |> mutate(Situação_B.2='Não concorreu')
+B.2nc <- base |> filter(B==0) |> mutate(Situação_B.2='Não concorreu')
 
 B.2aux <- rbind(B.2ap,B.2nc)
 
@@ -263,7 +263,7 @@ A2.2ap <- base |> filter(Situação_A2.1=='Não aprovado', A2==1, FORMULA >= 588
                          LCT>=300, MT>=250) |> 
   mutate(Situação_A2.2='Aprovado')
 
-A2.2nc <- base |> filter(A2.2==0) |> mutate(Situação_A2.2='Não concorreu')
+A2.2nc <- base |> filter(A2==0) |> mutate(Situação_A2.2='Não concorreu')
 
 A2.2aux <- rbind(A2.2ap,A2.2nc)
 
@@ -276,7 +276,7 @@ A6.2ap <- base |> filter(Situação_A6.1=='Não aprovado', A6==1, A7==0, FORMULA
                          LCT>=300, MT>=250) |> 
   mutate(Situação_A6.2='Aprovado')
 
-A6.2nc <- base |> filter(A6.2==0) |> mutate(Situação_A6.2='Não concorreu')
+A6.2nc <- base |> filter(A6==0) |> mutate(Situação_A6.2='Não concorreu')
 
 A6.2aux <- rbind(A6.2ap,A6.2nc)
 
@@ -290,7 +290,7 @@ A7.2ap <- base |> filter(Situação_A7.1=='Não aprovado', A7==1, FORMULA >= 586
                          LCT>=300, MT>=250) |> 
   mutate(Situação_A7.2='Aprovado')
 
-A7.2nc <- base |> filter(A7.2==0) |> mutate(Situação_A7.2='Não concorreu')
+A7.2nc <- base |> filter(A7==0) |> mutate(Situação_A7.2='Não concorreu')
 
 A7.2aux <- rbind(A7.2ap,A7.2nc)
 
@@ -299,5 +299,6 @@ A7.2na <- base |> filter(!indicador %in% A7.2aux$indicador) |>
 
 base <- rbind(A7.2aux,A7.2na)
 #############################################################
+base <- arrange(base, indicador)
 
 rm(list=setdiff(ls(), "base"))
