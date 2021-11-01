@@ -155,3 +155,25 @@ B.2 <- mutate(B.2, B=0)
 base <- rbind(B.1,B.2)
 #---------------------------------------------------------------
 base <- arrange(base, by=indicador)
+
+
+## Excluindo tudo que não será mais utilizado
+rm(A1.1,A1.2,A2.1,A2.2,A6.1,A6.2,A7.1,A7.2,B.1,B.2,base_enem)
+
+
+
+
+## Variável sobre situação de aprovação
+
+b1ap <- base |> filter(B==1, FORMULA >= 661.34, R>=300, CNT>=300,CHT>=350,
+                       LCT>=300, MT>=250) |> 
+  mutate(Situação_B.1='Aprovado')
+
+b1nc <- base |> filter(B==0) |> mutate(Situação_B.1='Não concorreu')
+
+b1aux <- rbind(b1ap,b1nc)
+
+b1na <- base |> filter(!indicador %in% b1aux$indicador) |> 
+  mutate(Situação_B.1='Não aprovado')
+
+base <- rbind(b1aux,b1na)
