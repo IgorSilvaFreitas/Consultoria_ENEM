@@ -84,15 +84,15 @@ dados <- read_csv('dados_ENEM.csv')
 dados <- dados[,-c(1,2)]
 
 ################################################################################################
-#raça
-dados$RACA<- ordered(dados$RACA,levels=c(0,1,2,3,4,5,6),
-                     labels=c("Não Declarado","Branco","Preta","Parda","Amarela","Indígina","Não dispõe da informação"))
-#sexo
-dados$SEXO<- ordered(dados$SEXO,levels=c("M","F"),
-                     labels=c("Masculino","Feminino"))
-#escola
-dados$ESCOLA <-ordered(dados$ESCOLA,levels=c(1,2,3,4),
-                       labels=c("Não Respondeu","Pública","Privada","Exterior"))#escolaridade da mãe
+# #raça
+# dados$RACA<- ordered(dados$RACA,levels=c(0,1,2,3,4,5,6),
+#                      labels=c("Não Declarado","Branco","Preta","Parda","Amarela","Indígina","Não dispõe da informação"))
+# #sexo
+# dados$SEXO<- ordered(dados$SEXO,levels=c("M","F"),
+#                      labels=c("Masculino","Feminino"))
+# #escola
+# dados$ESCOLA <-ordered(dados$ESCOLA,levels=c(1,2,3,4),
+#                        labels=c("Não Respondeu","Pública","Privada","Exterior"))
 # #trabalho
 # dados$TRAB <-ordered(dados$TRAB,levels=c("A","B","C"),
 #                           labels=c("Não, nunca trabalhei.","Sim, já trabalhei, mas não estou trabalhando.","Sim, estou trabalhando."))
