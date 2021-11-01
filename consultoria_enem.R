@@ -80,8 +80,8 @@ setwd("C:/Users/polia/OneDrive/Documentos/GitHub/Consultoria_ENEM")
 # write.csv(dados,'dados_ENEM.csv')
 
 
-dados <- read_csv('dados_ENEM.csv')
-dados <- dados[,-c(1,2)]
+# dados <- read_csv('dados_ENEM.csv')
+# dados <- dados[,-c(1,2)]
 
 ################################################################################################
 # #raça
