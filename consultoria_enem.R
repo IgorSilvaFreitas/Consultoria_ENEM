@@ -231,7 +231,7 @@ A7.1na <- base |> filter(!indicador %in% A7.1aux$indicador) |>
 base <- rbind(A7.1aux,A7.1na)
 #------------------------------------------------------------------------------
 ## B.2- 2º período
-B.2ap <- base |> filter(B.2==1, FORMULA >= 625.81, R>=300, CNT>=300,CHT>=350,
+B.2ap <- base |> filter(Situação_B.1=='Não aprovado', B==1, FORMULA >= 625.81, R>=300, CNT>=300,CHT>=350,
                         LCT>=300, MT>=250) |> 
   mutate(Situação_B.2='Aprovado')
 
@@ -245,7 +245,7 @@ B.2na <- base |> filter(!indicador %in% B.2aux$indicador) |>
 base <- rbind(B.2aux,B.2na)
 #------------------------------------------------------------------------------
 ## A1.2- 2º período
-A1.2ap <- base |> filter(A1.2=='Não aprovado', A1==1, A2==0, FORMULA >= 612.20, R>=300, CNT>=300,CHT>=350,
+A1.2ap <- base |> filter(Situação_A1.1=='Não aprovado', A1==1, A2==0, FORMULA >= 612.20, R>=300, CNT>=300,CHT>=350,
                          LCT>=300, MT>=250) |> 
   mutate(Situação_A1.2='Aprovado')
 
@@ -259,7 +259,7 @@ A1.2na <- base |> filter(!indicador %in% A1.2aux$indicador) |>
 base <- rbind(A1.2aux,A1.2na)
 #------------------------------------------------------------------------------
 ## A2.2- 2º período
-A2.2ap <- base |> filter(A2.2==1, FORMULA >= 588.24, R>=300, CNT>=300,CHT>=350,
+A2.2ap <- base |> filter(Situação_A2.1=='Não aprovado', A2==1, FORMULA >= 588.24, R>=300, CNT>=300,CHT>=350,
                          LCT>=300, MT>=250) |> 
   mutate(Situação_A2.2='Aprovado')
 
@@ -272,7 +272,7 @@ A2.2na <- base |> filter(!indicador %in% A2.2aux$indicador) |>
 
 base <- rbind(A2.2aux,A2.2na)
 #------------------------------------------------------------------------------
-A6.2ap <- base |> filter(A6.2==1, FORMULA >= 619.39, R>=300, CNT>=300,CHT>=350,
+A6.2ap <- base |> filter(Situação_A6.1=='Não aprovado', A6==1, A7==0, FORMULA >= 619.39, R>=300, CNT>=300,CHT>=350,
                          LCT>=300, MT>=250) |> 
   mutate(Situação_A6.2='Aprovado')
 
@@ -286,7 +286,7 @@ A6.2na <- base |> filter(!indicador %in% A6.2aux$indicador) |>
 base <- rbind(A6.2aux,A6.2na)
 #------------------------------------------------------------------------------
 ## A7.2- 2º período
-A7.2ap <- base |> filter(A7.2==1, FORMULA >= 586.84, R>=300, CNT>=300,CHT>=350,
+A7.2ap <- base |> filter(Situação_A7.1=='Não aprovado', A7==1, FORMULA >= 586.84, R>=300, CNT>=300,CHT>=350,
                          LCT>=300, MT>=250) |> 
   mutate(Situação_A7.2='Aprovado')
 
