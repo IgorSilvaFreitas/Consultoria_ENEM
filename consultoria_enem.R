@@ -7,12 +7,11 @@ library(stringr)
 library(dplyr)
 
 
-
-setwd("C:/Users/Igor/Documents/GitHub/Consultoria_ENEM")
+setwd("C:/Users/polia/OneDrive/Documentos/GitHub/Consultoria_ENEM")
 
 # dados <- read_csv2('microdados_enem_2016.csv') |> filter(NU_ANO==2016,
-#                                                         TP_ST_CONCLUSAO==c(1,2),
-#                                                         SG_UF_RESIDENCIA==c('RJ','SP','MG','ES'),
+#                                                         TP_ST_CONCLUSAO %in% c(1,2),
+#                                                         SG_UF_RESIDENCIA %in% c('RJ','SP','MG','ES'),
 #                                                         IN_TREINEIRO==0,
 #                                                         TP_PRESENCA_LC==1,
 #                                                         TP_PRESENCA_CH==1) |>
