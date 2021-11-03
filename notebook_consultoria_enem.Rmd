@@ -1033,3 +1033,54 @@ base |>
   theme_classic()
 
 ```
+
+```{r}
+uf.1.a <- base |>  filter(Situação_A1.1=="Aprovado"|
+           Situação_A2.1=="Aprovado" |
+           Situação_A6.1=="Aprovado"|
+           Situação_A7.1=="Aprovado" | 
+           Situação_B.1=="Aprovado") |> 
+  group_by(UF) |> 
+  summarise(n=n())
+
+uf.2.a <- base |> filter(Situação_A1.2=="Aprovado"|
+           Situação_A2.2=="Aprovado" |
+           Situação_A6.2=="Aprovado"|
+           Situação_A7.2=="Aprovado" | 
+           Situação_B.2=="Aprovado") |> 
+  group_by(UF) |> 
+  summarise(n2=n())
+
+uf <- left_join(uf.1.a,uf.2.a)
+
+# Carregando pacote
+library(ggalt)
+
+# Criando um gráfico de dumbbell
+library(ggrepel)
+uf |> 
+ggplot(mapping = aes(y = reorder(UF, n),
+                     x = n,
+                     xend = n2)) +  
+  geom_dumbbell(size = 1.2,
+                size_x = 3, 
+                size_xend = 3,
+                colour = "grey", 
+                colour_x = "blue", 
+                colour_xend = "red") +
+  scale_x_continuous(breaks = seq(5000,65000,10000))+
+  theme_minimal() + 
+  labs(title = "Perfil dos Candidados aprovados em pedagogia na UFF por periodo",
+       subtitle = "1º periodo e 2º periodo",
+       x = "aprovados",
+       y = "UF")+
+  theme(legend.position = "none", plot.title = element_text(hjust = 0.5, size=14, face="bold"),
+        text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12)) +
+   geom_text_repel(aes(label = n),
+                  size = 3)
+  
+  
+
+
+```
+
