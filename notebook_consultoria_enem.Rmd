@@ -1,5 +1,5 @@
 
-```{r, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ### Consultoria ENEM 2016
 
 
@@ -111,7 +111,7 @@ library(treemapify)
 
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 # library(dplyr)
 # 
 # load("dados_enem.RData")
@@ -183,7 +183,7 @@ library(treemapify)
 # 
 # ```
 # 
-# ```{r}
+# ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 # ## Variável sobre situação de aprovação
 # 
 # b1ap <- base |> filter(B==1, FORMULA >= 661.34, R>=300, CNT>=300,CHT>=350,
@@ -334,7 +334,7 @@ library(treemapify)
 ```
 
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 ## Sumário para cada classe de concorrência
 load("base_enem.RData")
 
@@ -432,7 +432,7 @@ base |>
 #---------------------------------------------------------------
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 ## Comparação segundo as Cotas B
 
 g1 <- base |> 
@@ -462,7 +462,7 @@ g2 <- base |>
 grid.arrange(g1, g2, ncol=2)
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 ## Comparação segundo as Cotas A1
 
 g1 <- base |> 
@@ -492,7 +492,7 @@ g2 <- base |>
 grid.arrange(g1, g2, ncol=2)
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 ## Comparação segundo as Cotas A2
 
 g1 <- base |> 
@@ -523,7 +523,7 @@ grid.arrange(g1, g2, ncol=2)
 ```
 
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 ## Comparação segundo as Cotas A6
 
 g1 <- base |> 
@@ -553,7 +553,7 @@ g2 <- base |>
 grid.arrange(g1, g2, ncol=2)
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 ## Comparação segundo as Cotas A7
 
 g1 <- base |> 
@@ -583,7 +583,7 @@ g2 <- base |>
 grid.arrange(g1, g2, ncol=2)
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 ######################################################################################
 ##grafico de barras para raça dos candidatos
 # Calculando o numero de pessoas em cada categoria de Raça
@@ -622,7 +622,7 @@ cont_RACA |>
 
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 ######################################################################################
 ##grafico de barras para raça dos candidatos
 # Calculando o numero de pessoas em cada categoria de Raça
@@ -661,7 +661,7 @@ cont_RACA |>
 
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 #grafico de barras para situação de trabalho remunerado e tipo de escola que frequentou o ensino médio - para os aprovados em pedagogia
 
 # criando um resumo do objeto base
@@ -712,7 +712,7 @@ perct_EM_TRAB |>
 
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 #grafico de barras para situação de trabalho remunerado e tipo de escola que frequentou o ensino médio(população geral)
 
 # criando um resumo do objeto base
@@ -763,7 +763,7 @@ perct_EM_TRAB |>
 
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 # #sexo geral
 # base$SEXO<- ordered(base$SEXO,levels=c("M","F"),labels=c("Masculino","Feminino"))
 # 
@@ -869,7 +869,7 @@ g22
 
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 #Gráfico treemap para escolaridade da mãe dos candidatos para os aprovados em pedagogia
 cont_ESCOL_MAE <- base |>
   filter(Situação_A1.1=="Aprovado"|
@@ -903,7 +903,7 @@ cont_ESCOL_MAE |>
        subtitle="Dados referentes aos candidatos do ENEM 2016 aprovados em pedagogia na UFF em 2017") +   theme_classic()
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 #Gráfico treemap para escolaridade da mãe dos candidatos (população geral)
 cont_ESCOL_MAE <- base |>
   filter(Situação_A1.1!="Aprovado",
@@ -937,7 +937,7 @@ cont_ESCOL_MAE |>
        subtitle="Dados referentes aos candidatos do ENEM 2016 (população geral)") + theme_classic()
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 #Histograma da idade dos candidatos para os aprovados em pedagogia
 base |> 
   filter(Situação_A1.1=="Aprovado"|
@@ -962,7 +962,7 @@ base |>
 
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 #Histograma da idade dos candidatos (população geral)
 base |> 
   filter(Situação_A1.1!="Aprovado",
@@ -987,7 +987,7 @@ base |>
 
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 #Boxplot do número de pessoas residentes na casa do candidato para os aprovados em pedagogia
 base |> 
   filter(Situação_A1.1=="Aprovado"|
@@ -1010,7 +1010,7 @@ base |>
 
 ```
 
-```{r}
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 10}
 #Boxplot do número de pessoas residentes na casa do candidato (população geral)
 base |> 
   filter(Situação_A1.1!="Aprovado",
