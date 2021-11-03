@@ -109,6 +109,8 @@ library(ggplot2)
 ```
 
 ```{r}
+library(dplyr)
+
 load("dados_enem.RData")
 base <- base_enem
 ## Criando grupos para classificar a classe de concorrência
@@ -118,36 +120,50 @@ base$indicador <- seq(from=1, to=length(base$RACA),by=1)
 A1.1 <- filter(base, RENDA %in% c("A","B","C"),
                EM == "A")
 A1.1 <- mutate(A1.1, A1=1)
+
 A1.2 <- filter(base, !indicador %in% A1.1$indicador) 
 A1.2 <- mutate(A1.2, A1=0)
 
 base <- rbind(A1.1,A1.2)
+
 #---------------------------------------------------------------
+
 A2.1 <- filter(base, RENDA %in% c("A","B","C"),
                EM == "A",
                RACA %in% c(2, 3, 5)) 
 A2.1 <- mutate(A2.1, A2=1)
+
 A2.2 <- filter(base, !indicador %in% A2.1$indicador) 
 A2.2 <- mutate(A2.2, A2=0)
 
+
 base <- rbind(A2.1,A2.2)
+
 #---------------------------------------------------------------
+
 A6.1 <- filter(base, !RENDA %in% c("A","B","C"),
                EM == "A")
 A6.1 <- mutate(A6.1, A6=1)
+
 A6.2 <- filter(base, !indicador %in% A6.1$indicador)
 A6.2 <- mutate(A6.2, A6=0)
 
 base <- rbind(A6.1,A6.2)
+
 #---------------------------------------------------------------
+
 A7.1 <- filter(base, !RENDA %in% c("A","B","C"),
                EM == "A",
                RACA %in% c(2, 3, 5))
 A7.1 <- mutate(A7.1, A7=1)
+
 A7.2 <- filter(base, !indicador %in% A7.1$indicador)
 A7.2 <- mutate(A7.2, A7=0)
+
 base <- rbind(A7.1,A7.2)
+
 #---------------------------------------------------------------
+
 B.1 <- filter(base, EM != "A")
 B.1 <- mutate(B.1, B=1)
 
@@ -237,7 +253,8 @@ B.2ap <- base |> filter(Situação_B.1=='Não aprovado', B==1, FORMULA >= 625.81
                         LCT>=300, MT>=250) |> 
   mutate(Situação_B.2='Aprovado')
 
-B.2nc <- base |> filter(B==0) |> mutate(Situação_B.2='Não concorreu')
+B.2nc <- base |> filter(B==0 | Situação_B.1=='Aprovado') |> 
+  mutate(Situação_B.2='Não concorreu')
 
 B.2aux <- rbind(B.2ap,B.2nc)
 
@@ -251,7 +268,8 @@ A1.2ap <- base |> filter(Situação_A1.1=='Não aprovado', A1==1, A2==0, FORMULA
                          LCT>=300, MT>=250) |> 
   mutate(Situação_A1.2='Aprovado')
 
-A1.2nc <- base |> filter(A1==0) |> mutate(Situação_A1.2='Não concorreu')
+A1.2nc <- base |> filter(A1==0 | Situação_A1.1=='Aprovado') |> 
+  mutate(Situação_A1.2='Não concorreu')
 
 A1.2aux <- rbind(A1.2ap,A1.2nc)
 
@@ -265,7 +283,8 @@ A2.2ap <- base |> filter(Situação_A2.1=='Não aprovado', A2==1, FORMULA >= 588
                          LCT>=300, MT>=250) |> 
   mutate(Situação_A2.2='Aprovado')
 
-A2.2nc <- base |> filter(A2==0) |> mutate(Situação_A2.2='Não concorreu')
+A2.2nc <- base |> filter(A2==0 | Situação_A2.1=='Aprovado') |> 
+  mutate(Situação_A2.2='Não concorreu')
 
 A2.2aux <- rbind(A2.2ap,A2.2nc)
 
@@ -278,7 +297,8 @@ A6.2ap <- base |> filter(Situação_A6.1=='Não aprovado', A6==1, A7==0, FORMULA
                          LCT>=300, MT>=250) |> 
   mutate(Situação_A6.2='Aprovado')
 
-A6.2nc <- base |> filter(A6==0) |> mutate(Situação_A6.2='Não concorreu')
+A6.2nc <- base |> filter(A6==0 | Situação_A6.1=='Aprovado') |> 
+  mutate(Situação_A6.2='Não concorreu')
 
 A6.2aux <- rbind(A6.2ap,A6.2nc)
 
@@ -292,7 +312,8 @@ A7.2ap <- base |> filter(Situação_A7.1=='Não aprovado', A7==1, FORMULA >= 586
                          LCT>=300, MT>=250) |> 
   mutate(Situação_A7.2='Aprovado')
 
-A7.2nc <- base |> filter(A7==0) |> mutate(Situação_A7.2='Não concorreu')
+A7.2nc <- base |> filter(A7==0 | Situação_A7.1=='Aprovado') |> 
+  mutate(Situação_A7.2='Não concorreu')
 
 A7.2aux <- rbind(A7.2ap,A7.2nc)
 
@@ -304,12 +325,254 @@ base <- rbind(A7.2aux,A7.2na)
 base <- arrange(base, indicador)
 
 rm(list=setdiff(ls(), "base"))
+
+base
+```
+
+
+```{r}
+## Sumário para cada classe de concorrência
+
+#Dentro do Grupo A1
+base |> 
+  filter(RENDA %in% c("A","B","C"),
+               EM == "A") |> 
+  rename(RA1=R, CNTA1=CNT, CHTA1=CHT, LCTA1=LCT, MTA1=MT, FORMULAA1=FORMULA) |> 
+  select(c(RA1, CNTA1, CHTA1, LCTA1, MTA1, FORMULAA1)) |> 
+  summary()
+
+
+#Fora do Grupo A1
+base |> 
+  filter(RENDA %in% c("A","B","C"),
+               EM == "A") |> 
+  rename(RFA1=R, CNTFA1=CNT, CHTFA1=CHT, LCTFA1=LCT, MTFA1=MT, FORMULAFA1=FORMULA) |> 
+  select(c(RFA1, CNTFA1, CHTFA1, LCTFA1, MTFA1, FORMULAFA1)) |> 
+  summary()
+
+#---------------------------------------------------------------
+
+#Dentro do Grupo A2
+base |> 
+  filter(RENDA %in% c("A","B","C"),
+               EM == "A",
+               RACA %in% c(2, 3, 5)) |> 
+  rename(RA2=R, CNTA2=CNT, CHTA2=CHT, LCTA2=LCT, MTA2=MT, FORMULAA2=FORMULA) |> 
+  select(c(RA2, CNTA2, CHTA2, LCTA2, MTA2, FORMULAA2)) |> 
+  summary()
+
+#Fora do Grupo A2
+base |> 
+  filter(!RENDA %in% c("A","B","C")|
+               EM != "A"|
+               !RACA %in% c(2, 3, 5)) |> 
+  rename(RFA2=R, CNTFA2=CNT, CHTFA2=CHT, LCTFA2=LCT, MTFA2=MT, FORMULAFA2=FORMULA) |> 
+  select(c(RFA2, CNTFA2, CHTFA2, LCTFA2, MTFA2, FORMULAFA2)) |> 
+  summary() 
+
+#---------------------------------------------------------------
+
+#Dentro do Grupo A6
+base |> 
+  filter(!RENDA %in% c("A","B","C"),
+               EM == "A") |> 
+  rename(RA6=R, CNTA6=CNT, CHTA6=CHT, LCTA6=LCT, MTA6=MT, FORMULAA6=FORMULA) |> 
+  select(c(RA6, CNTA6, CHTA6, LCTA6, MTA6, FORMULAA6)) |> 
+  summary()
+
+#Fora do Grupo A6
+base |> 
+  filter(RENDA %in% c("A","B","C")|
+               EM != "A") |> 
+  rename(RFA6=R, CNTFA6=CNT, CHTFA6=CHT, LCTFA6=LCT, MTFA6=MT, FORMULAFA6=FORMULA) |> 
+  select(c(RFA6, CNTFA6, CHTFA6, LCTFA6, MTFA6, FORMULAFA6)) |> 
+  summary()
+
+#---------------------------------------------------------------
+
+#Dentro do Grupo A7
+base |> 
+  filter(!RENDA %in% c("A","B","C"),
+               EM == "A",
+               RACA %in% c(2, 3, 5)) |> 
+  rename(RA7=R, CNTA7=CNT, CHTA7=CHT, LCTA7=LCT, MTA7=MT, FORMULAA7=FORMULA) |> 
+  select(c(RA7, CNTA7, CHTA7, LCTA7, MTA7, FORMULAA7)) |> 
+  summary()
+
+#Fora do Grupo A7
+base |> 
+  filter(RENDA %in% c("A","B","C")|
+               EM != "A"|
+               !RACA %in% c(2, 3, 5)) |> 
+  rename(RFA7=R, CNTFA7=CNT, CHTFA7=CHT, LCTFA7=LCT, MTFA7=MT, FORMULAFA7=FORMULA) |> 
+  select(c(RFA7, CNTFA7, CHTFA7, LCTFA7, MTFA7, FORMULAFA7)) |> 
+  summary()
+
+#---------------------------------------------------------------
+
+#Dentro do Grupo B
+base |> 
+  filter(EM != "A") |> 
+  rename(RB=R, CNTB=CNT, CHTB=CHT, LCTB=LCT, MTB=MT, FORMULAB=FORMULA) |> 
+  select(c(RB, CNTB, CHTB, LCTB, MTB, FORMULAB)) |> 
+  summary()
+
+#Fora do Grupo B
+base |> 
+  filter(EM == "A") |> 
+  rename(RFB=R, CNTFB=CNT, CHTFB=CHT, LCTFB=LCT, MTFB=MT, FORMULAFB=FORMULA) |> 
+  select(c(RFB, CNTFB, CHTFB, LCTFB, MTFB, FORMULAFB)) |> 
+  summary()
+
+#---------------------------------------------------------------
+
+```
+```{r}
+## Comparação segundo as Cotas A1
+library(ggplot2)
+library(gridExtra)
+
+g1 <- base |> 
+  count(Situação_A1.1) |> 
+  ggplot(aes(x=Situação_A1.1, y=n)) + 
+  geom_bar(stat='identity',
+           fill="orange") +
+  geom_text(aes(label = n), 
+            vjust=-0.5)+
+  labs(x="Situação na ação afirmativa A1 1°chamada",
+       y='Frequência')+
+  theme_classic()
+g2 <- base |> 
+  count(Situação_A1.2) |> 
+  ggplot(aes(x=Situação_A1.2, y=n)) + 
+  geom_bar(stat='identity',
+           fill="orange") +
+  geom_text(aes(label = n), 
+            vjust=-0.5)+
+  labs(x="Situação na ação afirmativa A1 2°chamada",
+       y='Frequência')+
+  theme_classic()
+
+grid.arrange(g1,g2,ncol=2)
+
+```
+
+
+```{r}
+## Comparação segundo as Cotas A2
+
+g1 <- base |> 
+  count(Situação_A2.1) |> 
+  ggplot(aes(x=Situação_A2.1, y=n)) + 
+  geom_bar(stat='identity',
+           fill="orange") +
+  geom_text(aes(label = n), 
+            vjust=-0.5)+
+  labs(x="Situação na ação afirmativa A2 1°chamada",
+       y='Frequência')+
+  theme_classic()
+g2 <- base |> 
+  count(Situação_A2.2) |> 
+  ggplot(aes(x=Situação_A2.2, y=n)) + 
+  geom_bar(stat='identity',
+           fill="orange") +
+  geom_text(aes(label = n), 
+            vjust=-0.5)+
+  labs(x="Situação na ação afirmativa A2 2°chamada",
+       y='Frequência')+
+  theme_classic()
+
+grid.arrange(g1,g2,ncol=2)
+
 ```
 
 ```{r}
-base |> 
-  filter(Situação_B.1=='Aprovado') |> 
-  ggplot(aes(x=IDADE)) + 
-  geom_histogram(fill="orange", col="White")
+## Comparação segundo as Cotas B
+
+g1 <- base |> 
+  count(Situação_B.1) |> 
+  ggplot(aes(x=Situação_B.1, y=n)) + 
+  geom_bar(stat='identity',
+           fill="red") +
+  geom_text(aes(label = n), 
+            vjust=-0.5) +
+  scale_y_continuous(label = scales::label_number(big.mark = ".",
+                                                     decimal.mark = ",")) +
+  labs(x="Candidatos na ampla concorrência (B)", y="Frequência", 
+       title="Situação dos candidatos na ampla concorrência (B) no 1º período")
+
+g2 <- base |> 
+  count(Situação_B.2) |> 
+  ggplot(aes(x=Situação_B.2, y=n)) + 
+  geom_bar(stat='identity',
+           fill="blue") +
+  geom_text(aes(label = n), 
+            vjust=-0.5) +
+    scale_y_continuous(label = scales::label_number(big.mark = ".",
+                                                     decimal.mark = ",")) +
+    labs(x="Candidatos na ampla concorrência (B)", y="Frequência", 
+       title="Situação dos candidatos na ampla concorrência (B) no 2º período")
+
+grid.arrange(g1, g2, ncol=2)
+```
+
+```{r}
+## Comparação segundo as Cotas A6
+
+g1 <- base |> 
+  count(Situação_A6.1) |> 
+  ggplot(aes(x=Situação_A6.1, y=n)) + 
+  geom_bar(stat='identity',
+           fill="red") +
+  geom_text(aes(label = n), 
+            vjust=-0.5) +
+  scale_y_continuous(label = scales::label_number(big.mark = ".",
+                                                     decimal.mark = ",")) +
+  labs(x="Candidatos na ação afirmativa A6", y="Frequência", 
+       title="Situação dos candidatos na ação afirmativa A6 no 1º período")
+
+g2 <- base |> 
+  count(Situação_A6.2) |> 
+  ggplot(aes(x=Situação_A6.2, y=n)) + 
+  geom_bar(stat='identity',
+           fill="blue") +
+  geom_text(aes(label = n), 
+            vjust=-0.5) +
+    scale_y_continuous(label = scales::label_number(big.mark = ".",
+                                                     decimal.mark = ",")) +
+    labs(x="Candidatos na ação afirmativa A6", y="Frequência", 
+       title="Situação dos candidatos na ação afirmativa A6 no 2º período")
+
+grid.arrange(g1, g2, ncol=2)
+```
+
+```{r}
+## Comparação segundo as Cotas A7
+
+g1 <- base |> 
+  count(Situação_A7.1) |> 
+  ggplot(aes(x=Situação_A7.1, y=n)) + 
+  geom_bar(stat='identity',
+           fill="red") +
+  geom_text(aes(label = n), 
+            vjust=-0.5) +
+  scale_y_continuous(label = scales::label_number(big.mark = ".",
+                                                     decimal.mark = ",")) +
+  labs(x="Candidatos na ação afirmativa A7", y="Frequência", 
+       title="Situação dos candidatos na ação afirmativa A7 no 1º período")
+
+g2 <- base |> 
+  count(Situação_A7.2) |> 
+  ggplot(aes(x=Situação_A7.2, y=n)) + 
+  geom_bar(stat='identity',
+           fill="blue") +
+  geom_text(aes(label = n), 
+            vjust=-0.5) +
+    scale_y_continuous(label = scales::label_number(big.mark = ".",
+                                                     decimal.mark = ",")) +
+    labs(x="Candidatos na ação afirmativa A7", y="Frequência", 
+       title="Situação dos candidatos na ação afirmativa A7 no 2º período")
+
+grid.arrange(g1, g2, ncol=2)
 ```
 
