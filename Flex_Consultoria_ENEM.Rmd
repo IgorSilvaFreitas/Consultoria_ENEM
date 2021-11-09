@@ -22,7 +22,7 @@ load("base_enem.RData")
 
 base = mutate_if(base, is.character, as.factor)
 base$RACA= as.factor(base$RACA)
-save(base, file="base_enem.RData")
+#save(base, file="base_enem.RData")
 
 ```
 
