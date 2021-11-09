@@ -1,8 +1,6 @@
 ---
 title: "Consultoria ENEM"
-output: 
-  flexdashboard::flex_dashboard:
-    vertical_layout: fill
+output: html_document
 ---
   
 ```{r setup, include=FALSE}
