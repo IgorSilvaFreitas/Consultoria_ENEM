@@ -34,9 +34,9 @@ Analisar perfil dos candidados ENEM 2016 da região Sudeste tendo critério de a
 
 ## O Conjunto de Dados
 
-O conjunto originalente tem xxxxx observações e xxxxxx variáveis.
+O conjunto originalente tem quase 9 milhões de observações e mais de 100 variáveis.
 
-Após as analises a base tem 1627945 observações e 32 variáveis.
+Após os tratamentos, a base ficou com 1627945 observações e 32 variáveis.
 
 
 ## Analises descritivas
@@ -535,22 +535,6 @@ perct_EM_RACA |>
 
 ### Situação de Trabalho x Número de Pessoas na Casa x Escolaridade da Mãe
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
-# calculando a media e as diversas medidas para as barras
-media_erros <- base |> 
-  group_by(ESCOL_MAE) |> 
-  summarize(n = n(),
-         media = mean(MORA),
-         desvio = sd(MORA),
-         erro.padrao = desvio / sqrt(n))
-
-# gráfico de médias com os erros padrões
-media_erros |> 
-  ggplot(mapping = aes(x = ESCOL_MAE,
-                       y = media)) +
-  geom_point(size = 3) +
-  geom_errorbar(aes(ymin = media - erro.padrao, 
-                    ymax = media + erro.padrao), 
-                width = .1)
 
 # calculando a media e as barras por TRAB e ESCOL_MAE
 media_erros <- base |> 
@@ -585,25 +569,3 @@ media_erros |>
   scale_x_discrete(guide = guide_axis(n.dodge = 2))
 ```
 
-### Aprovação na pedagogia x Idade
-```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
-# gráfico de Aprovação na pedagogia x idade
-base = base |> 
-  mutate(AP = ifelse(Situação_A1.1=="Aprovado"|
-           Situação_A2.1=="Aprovado" |
-           Situação_A6.1=="Aprovado"|
-           Situação_A7.1=="Aprovado" | 
-           Situação_B.1=="Aprovado",'Aprovado','Não aprovado')) 
-
-base |>
-  ggplot(mapping = aes(x = IDADE,
-                       fill = AP)) +
-  geom_density(alpha = 0.4) +
-  labs(title = "Distribuição da idade por situação de aprovação em pedagogia na UFF em 2017",
-       y = "Densidade",
-       subtitle="Dados referentes aos candidatos do ENEM 2016 (população geral)") + theme_classic() +
-  theme(legend.position = "top")  +
-  theme(plot.title = element_text(hjust = 0.5, size=14, face="bold"),
-        text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12)) +
-  scale_x_discrete(guide = guide_axis(n.dodge = 2))  
-```
