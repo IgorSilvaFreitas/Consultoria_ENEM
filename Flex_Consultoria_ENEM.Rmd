@@ -1,8 +1,12 @@
 ---
-title: "Consultoria ENEM"
-output: html_document
+title: "Análise dos Cadidatos de ENEM 2016 Região Sudeste"
+author: "PIXRJ - Consultoria"
+date: "11/2021"
+output: 
+  rmdformats::readthedown
+
 ---
-  
+
 ```{r setup, include=FALSE}
 {library(flexdashboard)
 library(readr)
@@ -23,6 +27,21 @@ base$RACA= as.factor(base$RACA)
 #save(base, file="base_enem.RData")
 
 ```
+
+
+## Objetivo
+Analisar perfil dos candidados ENEM 2016 da região Sudeste tendo critério de aprovação para curso de Pedagogia de UFF no primeiro periodo de 2017.
+
+## O Conjunto de Dados
+
+O conjunto originalente tem xxxxx observações e xxxxxx variáveis.
+
+Após as analises a base tem 1627945 observações e 32 variáveis.
+
+
+## Analises descritivas
+
+### Situação de Aprovação dos candidatos
 
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 base |> 
@@ -45,6 +64,10 @@ base |>
 
 ```
   
+  
+
+### Escolaridade da Mãe dos Candidatos  {.tabset}
+#### Aprovados
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 #Gráfico treemap para escolaridade da mãe dos candidatos para os aprovados em pedagogia
 cont_ESCOL_MAE <- base |>
@@ -74,6 +97,7 @@ gem1 = cont_ESCOL_MAE |>
 gem1
 ```
 
+#### População Geral
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 #Gráfico treemap para escolaridade da mãe dos candidatos (população geral)
 cont_ESCOL_MAE <- base |>
@@ -98,6 +122,10 @@ gem2 = cont_ESCOL_MAE |>
 gem2
 ```
 
+
+### Raça dos candidatos {.tabset}
+
+#### Aprovados
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 ######################################################################################
 ##grafico de barras para raça dos candidatos
@@ -131,6 +159,7 @@ gr1 = cont_RACA |>
 gr1
 ```
 
+#### População Geral
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 ######################################################################################
 ##grafico de barras para raça dos candidatos
@@ -160,6 +189,8 @@ gr2
 
 ```
 
+
+### Sexo dos Candidatos
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 # #sexo geral
 # base$SEXO<- ordered(base$SEXO,levels=c("M","F"),labels=c("Masculino","Feminino"))
@@ -253,6 +284,7 @@ grid.arrange(g21, g22, ncol=2)
 
 ```
 
+### Tipo de Ensino Médio Frequantado dos Candidatos
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 #grafico de barras para situação de Situação_B.1alho remunerado e tipo de escola que frequentou o ensino médio(população geral)
 
@@ -293,6 +325,9 @@ perct_EM_Aprovado |>
 
 ```
 
+### Situação de Tranalho dos Candidatos  {.tabset}
+#### Aprovados
+
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 ######################################################################################
 ##grafico de barras para situação de trabalho remunerado dos candidatos
@@ -321,6 +356,7 @@ gt1 = cont_TRAB |>
 gt1
 ```
 
+#### População Geral
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 ######################################################################################
 ##grafico de barras para situação de trabalho remunerado dos candidatos
@@ -344,6 +380,7 @@ gt2 = cont_TRAB |>
 gt2
 ```
 
+### Número de Pessoas Residentes na Casa dos Candidatos
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 15}
 
 #Boxplot do número de pessoas residentes na casa do candidato para os aprovados em pedagogia
@@ -373,6 +410,8 @@ b2= base |>
 grid.arrange(b1, b2, ncol=2)
 ```
 
+### Idade dos Candidatos  {.tabset}
+#### Aprovados
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 #Histograma da idade dos candidatos para os aprovados em pedagogia
 h1 = base |> 
@@ -393,6 +432,7 @@ h1 = base |>
 h1
 ```
 
+#### População Geral
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 #Histograma da idade dos candidatos (população geral)
 h2 = base |> 
@@ -408,6 +448,7 @@ h2 = base |>
 h2
 ```
 
+### UF dos Aprovados dos 2 periodos
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 uf.1.a <- base |>  filter(Situação_A1.1=="Aprovado"|
            Situação_A2.1=="Aprovado" |
@@ -451,6 +492,9 @@ ggplot(mapping = aes(y = reorder(UF, n),
 ```
 
 
+## Análise Cruzada (população geral)
+
+### Tipo de Ensino Médio X Raça
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 #grafico de barras para situação de Situação_B.1alho remunerado e tipo de escola que frequentou o ensino médio(população geral)
 
@@ -489,6 +533,7 @@ perct_EM_RACA |>
   scale_x_discrete(guide = guide_axis(n.dodge = 2))
 ```
 
+### Situação de Trabalho x Número de Pessoas na Casa x Escolaridade da Mãe
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 # calculando a media e as diversas medidas para as barras
 media_erros <- base |> 
@@ -540,8 +585,9 @@ media_erros |>
   scale_x_discrete(guide = guide_axis(n.dodge = 2))
 ```
 
+### Aprovação na pedagogia x Idade
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
-# gráfico de densidade da remuneração por sexo
+# gráfico de Aprovação na pedagogia x idade
 base = base |> 
   mutate(AP = ifelse(Situação_A1.1=="Aprovado"|
            Situação_A2.1=="Aprovado" |
