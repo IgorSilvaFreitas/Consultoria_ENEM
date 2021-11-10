@@ -1,5 +1,5 @@
 ---
-title: "Análise dos Cadidatos de ENEM 2016 Região Sudeste"
+title: "Análise dos Candidatos de ENEM 2016 - Região Sudeste"
 author: "PIXRJ - Consultoria"
 date: "11/2021"
 output: 
@@ -30,13 +30,13 @@ base$RACA= as.factor(base$RACA)
 
 
 ## Objetivo
-Analisar perfil dos candidados ENEM 2016 da região Sudeste tendo critério de aprovação para curso de Pedagogia de UFF no primeiro periodo de 2017.
+Analisar o perfil dos candidatos do ENEM 2016 da região Sudeste tendo critério de aprovação para curso de Pedagogia de UFF no primeiro período de 2017 e a população nessa região de interesse que prestaram o ENEM nesse ano.
 
 ## O Conjunto de Dados
 
-O conjunto originalente tem quase 9 milhões de observações e mais de 100 variáveis.
+O conjunto originalmente tem quase 9 milhões de observações e mais de 100 variáveis.
 
-Após os tratamentos, a base ficou com 1627945 observações e 32 variáveis.
+Após os tratamentos, a base ficou com 1.627.945 observações e 32 variáveis.
 
 
 ## Analises descritivas
@@ -284,7 +284,7 @@ grid.arrange(g21, g22, ncol=2)
 
 ```
 
-### Tipo de Ensino Médio Frequantado dos Candidatos
+### Tipo de Ensino Médio Frequentado pelos Candidatos
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 #grafico de barras para situação de Situação_B.1alho remunerado e tipo de escola que frequentou o ensino médio(população geral)
 
@@ -325,7 +325,7 @@ perct_EM_Aprovado |>
 
 ```
 
-### Situação de Tranalho dos Candidatos  {.tabset}
+### Situação de Trabalho dos Candidatos  {.tabset}
 #### Aprovados
 
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
@@ -380,11 +380,13 @@ gt2 = cont_TRAB |>
 gt2
 ```
 
-### Número de Pessoas Residentes na Casa dos Candidatos
-
+### Número de Pessoas Residentes na Casa dos Candidatos {.tabset}
+#### Aprovados
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 # gráfico de médias com os erros padrões aprovados
 g1 <- base |> 
+  mutate(ESCOL_MAE= ordered(ESCOL_MAE,levels=c("A","B","C","D","E","F","G","H"),
+                        labels=c("Sem estudo","Até 5º ano do EF\n incompleto","Até 9º ano do EF\n incompleto","Até EM incompleto","Completou o EM, mas\n não completou a Faculdade","Completou a Faculdade, mas\n não completou a Pós-graduação","Completou a Pós-graduação","Não sei"))) |> 
   filter(Situação_A1.1=="Aprovado"|
            Situação_A2.1=="Aprovado" |
            Situação_A6.1=="Aprovado"|
@@ -403,11 +405,17 @@ g1 <- base |>
                 width = .1) +
   labs(x='Escolaridade da mãe',
        y='Média de pessoas na casa',
-       title='Média de pessoa na casa segundo a escolaridade da mãe dentre os aprovados')
+       title='Média de pessoas na casa segundo a escolaridade da mãe dentre os aprovados')
 
+g1
+```
 
+#### População Geral
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 # gráfico de médias com os erros padrões pop geral
 g2 <- base |> 
+    mutate(ESCOL_MAE= ordered(ESCOL_MAE,levels=c("A","B","C","D","E","F","G","H"),
+                        labels=c("Sem estudo","Até 5º ano do EF\n incompleto","Até 9º ano do EF\n incompleto","Até EM incompleto","Completou o EM, mas\n não completou a Faculdade","Completou a Faculdade, mas\n não completou a Pós-graduação","Completou a Pós-graduação","Não sei"))) |> 
   group_by(ESCOL_MAE) |> 
   summarize(n = n(),
          media = mean(MORA),
@@ -421,9 +429,9 @@ g2 <- base |>
                 width = .1) +
   labs(x='Escolaridade da mãe',
        y='Média de pessoas na casa',
-       title='Média de pessoa na casa segundo a escolaridade da mãe na população geral')
+       title='Média de pessoas na casa segundo a escolaridade da mãe na população geral')
 
-grid.arrange(g1,g2,ncol=2)
+g2
 ```
 
 ### Idade dos Candidatos  {.tabset}
@@ -464,7 +472,7 @@ h2 = base |>
 h2
 ```
 
-### UF dos Aprovados dos 2 periodos
+### UF dos Aprovados dos 2 períodos
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 uf.1.a <- base |>  filter(Situação_A1.1=="Aprovado"|
            Situação_A2.1=="Aprovado" |
