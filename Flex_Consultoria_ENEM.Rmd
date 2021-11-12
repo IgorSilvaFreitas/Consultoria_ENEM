@@ -1,5 +1,6 @@
 ---
 title: "Análise dos Candidatos de ENEM 2016 - Região Sudeste"
+subtitle: "Renato Dias"
 author: "PIXRJ - Consultoria"
 date: "11/2021"
 output: 
@@ -30,7 +31,7 @@ base$RACA= as.factor(base$RACA)
 
 
 ## Objetivo
-Analisar o perfil dos candidatos do ENEM 2016 da região Sudeste tendo critério de aprovação para curso de Pedagogia de UFF no primeiro período de 2017 e a população nessa região de interesse que prestaram o ENEM nesse ano.
+Analisar o perfil dos candidatos do ENEM 2016 da região Sudeste e aqueles nessas condições que obteriam aprovação para curso de Pedagogia de UFF no primeiro período de 2017.
 
 ## O Conjunto de Dados
 
@@ -405,7 +406,12 @@ g1 <- base |>
                 width = .1) +
   labs(x='Escolaridade da mãe',
        y='Média de pessoas na casa',
-       title='Média de pessoas na casa segundo a escolaridade da mãe dentre os aprovados')
+       title='Média de pessoas na casa segundo a escolaridade da mãe',
+       subtitle="Dados referentes aos candidatos do ENEM 2016 aprovados em pedagogia na UFF em 2017") +   theme_classic() +
+  theme(legend.position = "top")  +
+  theme(plot.title = element_text(hjust = 0.5, size=14, face="bold"),
+        text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12)) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2))
 
 g1
 ```
@@ -429,7 +435,12 @@ g2 <- base |>
                 width = .1) +
   labs(x='Escolaridade da mãe',
        y='Média de pessoas na casa',
-       title='Média de pessoas na casa segundo a escolaridade da mãe na população geral')
+       title='Média de pessoas na casa segundo a escolaridade da mãe',
+       subtitle="Dados referentes aos candidatos do ENEM 2016 (população geral)")+ theme_classic() +
+  theme(legend.position = "top")  +
+  theme(plot.title = element_text(hjust = 0.5, size=14, face="bold"),
+        text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12)) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2))
 
 g2
 ```
@@ -557,7 +568,7 @@ perct_EM_RACA |>
   scale_x_discrete(guide = guide_axis(n.dodge = 2))
 ```
 
-### Situação de Trabalho x Número de Pessoas na Casa x Escolaridade da Mãe
+### Situação de Trabalho Remunerado x Número de Pessoas na Casa x Escolaridade da Mãe
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
 
 # calculando a media e as barras por TRAB e ESCOL_MAE
@@ -581,7 +592,7 @@ media_erros |>
   geom_errorbar(aes(ymin = media - erro.padrao, 
                     ymax = media + erro.padrao), 
                 width = .1) + 
-  ylim(c(3.5,4.5)) +
+  #ylim(c(3.5,4.5)) +
   labs(x = "Escolaridade da mãe",
        y = "Média do número de pessoas residentes na casa",
        color = "Situação de trabalho remunerado",
@@ -593,3 +604,26 @@ media_erros |>
   scale_x_discrete(guide = guide_axis(n.dodge = 2))
 ```
 
+### Situação de Trabalho Remunerado x Idade
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
+# Boxplot por TRAB
+# criando um resumo do objeto survey
+media_grafico <- base |> 
+   mutate(TRAB = ordered(TRAB,levels=c("A","B","C"), labels=c("Não, nunca trabalhei.","Sim, já trabalhei, \nmas não estou trabalhando.","Sim, estou trabalhando."))) |> 
+  group_by(TRAB) |> 
+  summarize(media = mean(IDADE, na.rm = TRUE))
+
+# criando o gráfico de barras para as médias
+media_grafico |>
+  ggplot(mapping = aes(x = TRAB,
+                       y = media)) +
+  geom_bar(stat = "identity", fill="darkblue") +
+  labs(x = "Situação de Trabalho Remunerado",
+       y = "Média da idade",
+       title="Perfil dos candidatos em relação à situação de trabalho remunerado e idade",
+       subtitle="Dados referentes aos candidatos do ENEM 2016 (população geral)") + theme_classic() +
+  theme(legend.position = "top")  +
+  theme(plot.title = element_text(hjust = 0.5, size=14, face="bold"),
+        text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12)) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2))
+```
