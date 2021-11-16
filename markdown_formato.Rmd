@@ -31,13 +31,13 @@ base$RACA= as.factor(base$RACA)
 
 
 ## Objetivo
-Analisar o perfil dos candidatos do ENEM 2016 da região Sudeste e aqueles nessas condições que obteriam aprovação para curso de Pedagogia de UFF no primeiro período de 2017.
+Analisar o perfil dos candidatos do ENEM 2016 da região Sudeste e aqueles nessas condições que obteriam aprovação para curso de Pedagogia na UFF no primeiro período de 2017.
 
 ## O Conjunto de Dados
 
 O conjunto originalmente tem quase 9 milhões de observações e mais de 100 variáveis.
 
-Após os tratamentos, a base ficou com 1.627.945 observações e 32 variáveis.
+Após os tratamentos, a base ficou com 1.627.945 observações e 14 variáveis.
 
 
 ## Análises descritivas
