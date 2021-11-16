@@ -631,7 +631,7 @@ ggplot(mapping = aes(y = reorder(UF, n),
 ```
 
 
-## Análise Cruzada (população geral)
+## Análises Cruzadas 
 
 ### Tipo de Ensino Médio X Raça {.tabset}
 #### Aprovados
