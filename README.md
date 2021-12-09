@@ -4,15 +4,15 @@
  # Introdução
  Nesta consultoria temos o objetivo de traçar o perfil dos participantes do ENEM 2016, que obedeciam a características de interesse selecionadas pelo cliente, que estariam aptos a ingressar no curso de Pedagogia na UFF na primeira chamada do ENEM 2017. Na seção 1 descrevemos o universo de estudo e a forma como foram tratados os dados, enviados pelo cliente. Na seção 2 apresentamos uma análise descritiva dos dados coletados e, por fim, na seção 3 tecemos nossas conclusões sobre o problema abordado.
 
-O problema apresentado inicialmente era gerar análises sobre os candidatos do ENEM 2016, ou seja, trabalhar com um grande volume de dados. 
+ O problema apresentado inicialmente era gerar análises sobre os candidatos do ENEM 2016, ou seja, trabalhar com um grande volume de dados. 
 
-A primeira etapa foi limpar o banco de dados, mantendo o registro apenas dos candidatos que obedeciam as características de interesse, definidas pelo cliente, sendo estes os candidatos:
+ A primeira etapa foi limpar o banco de dados, mantendo o registro apenas dos candidatos que obedeciam as características de interesse, definidas pelo cliente, sendo estes os candidatos:
 * Pertencentes à Região Sudeste;
 * Que participaram dos dois dias de prova;
 * Que não estavam fazendo ENEM apenas como treino;
 * Aptos a realizar o SISU, ou seja, que já terminaram ou que terminariam o ensino médio em 2016.
 
-A segunda etapa foi selecionar as características sociodemográficas predeterminadas pelo cliente, além de adicionar a característica sobre a Unidade Federativa do candidato.
+ A segunda etapa foi selecionar as características sociodemográficas predeterminadas pelo cliente, além de adicionar a característica sobre a Unidade Federativa do candidato.
 * Raça;
 * Sexo;
 * Idade;
@@ -22,7 +22,15 @@ A segunda etapa foi selecionar as características sociodemográficas predetermi
 * Situação de trabalho remunerado;
 * Unidade Federativa.
 
-O cliente anseia separar os candidatos aprovados no curso de pedagogia da UFF na primeira chamada do ENEM 2017 e a população geral, que seriam todos os candidatos restantes após os tratamentos da primeira etapa. Para tal, foi criado uma variável sobre a cota do participante, com ajuda da tabela que está no Anexo 1, como auxílio, a característica sobre a renda familiar foi utilizada. 
+ O cliente anseia separar os candidatos aprovados no curso de pedagogia da UFF na primeira chamada do ENEM 2017 e a população geral, que seriam todos os candidatos restantes após os tratamentos da primeira etapa. Para tal, foi criado uma variável sobre a cota do participante, com ajuda da tabela que está no Anexo 1, como auxílio, a característica sobre a renda familiar foi utilizada. 
 
-Para criar a variável sobre aprovação, foi necessário a seleção das variáveis que contém as notas de cada prova. Sabendo a cota do candidato, e considerando que cada um só pode participar de uma cota, foi criado a variável de aprovados e não aprovados. Os candidatos aprovados deveriam possuir nota superior à nota de corte, além de nota superior à mínima para cada prova. A nota de corte é baseada na fórmula disponível no Anexo 1 e as notas mínimas para cada prova são apresentadas na tabela no Anexo 2.
+ Para criar a variável sobre aprovação, foi necessário a seleção das variáveis que contém as notas de cada prova. Sabendo a cota do candidato, e considerando que cada um só pode participar de uma cota, foi criado a variável de aprovados e não aprovados. Os candidatos aprovados deveriam possuir nota superior à nota de corte, além de nota superior à mínima para cada prova. A nota de corte é baseada na fórmula disponível no Anexo 1 e as notas mínimas para cada prova são apresentadas na tabela no Anexo 2.
 
+# Análises e resultados
+
+ O conjunto de dados originalmente tinha quase 9 milhões de observações e mais de 100 variáveis. Após os tratamentos, a base ficou com informações de 1.627.945 candidatos, que compõem a população geral, e 14 características sócio-demográficas sobre cada um deles.
+	Pela Figura 1 pode-se observar a diferença, já esperada, da quantidade de candidatos com “passaporte” para a aprovação e os que não foram aprovados, pelo menos na primeira chamada. Dos 1.627.945 candidatos de interesse, 159.616 deles estavam com “passaporte” de aprovação para o curso de Pedagogia na UFF em 2017.
+![Figura 1: Situação de aprovação em pedagogia na UFF 2017 no 1º período](graficos/aprovacao.jpeg)
+
+ Na Figura 2, é possível notar que, proporcionalmente, a classe de Ampla Concorrência (B) é a que possui maior índice de aprovação (25,6%). Isto pode indicar que as características que influenciam cada cota, como renda, raça e escola que frequentou durante o ensino médio podem afetar na aprovação do candidato.
+ ![Figura 2: Situação de aprovação em pedagogia na UFF 2017 no 1º período para as diferentes classes de cota](graficos/Classes_juntas.png){widht=1000}
