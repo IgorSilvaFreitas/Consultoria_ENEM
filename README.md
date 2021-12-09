@@ -1,5 +1,8 @@
 # Consultoria_ENEM
- O pesquisador Renato Dias entrou em contato com a PIXRJ para realização de uma consultoria sobre os microdados do ENEM
+ O pesquisador Renato Dias entrou em contato com a PIXRJ para realização de uma consultoria sobre os microdados do ENEM.
+ 
+# Observação
+ Esta consultoria é parte da matéria estatística aplicada. Onde o objetivo é aplicar o conhecimento adquirido durante o curso de estatística realizando consultorias que será apresentada e avaliada pelo professor.
  
  # Introdução
  Nesta consultoria temos o objetivo de traçar o perfil dos participantes do ENEM 2016, que obedeciam a características de interesse selecionadas pelo cliente, que estariam aptos a ingressar no curso de Pedagogia na UFF na primeira chamada do ENEM 2017. Na seção 1 descrevemos o universo de estudo e a forma como foram tratados os dados, enviados pelo cliente. Na seção 2 apresentamos uma análise descritiva dos dados coletados e, por fim, na seção 3 tecemos nossas conclusões sobre o problema abordado.
