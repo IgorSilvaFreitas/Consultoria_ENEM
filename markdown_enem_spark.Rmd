@@ -8,48 +8,50 @@ library(DBI)
 library(magrittr)
 library(ggplot2)
 
+## Instalando o spark
+#spark_install()
+
 ## Iniciando spark
 conf <- spark_config()
 
-
 conf$`sparklyr.shell.driver-memory` <- "8G"
 
-sc <- spark_connect(master = "local", config = conf)
+sc <- spark_connect(master = "local", config = conf, version="2.4.3")
 
 
 ## Importando dados // Lendo base já tratada 
 dados <- spark_read_csv(sc=sc,path='microdados_enem_2016.csv',delimiter = ";")
 base <- spark_read_parquet(sc=sc,path='dados_parquet')
 
-
+## Exportando o sparkdataframe para um dataframe do R
 #base_enem <- collect(base)
 ```
 
 ```{r}
 # 
 # ## Realizando tratamentos necessários para realização dos objetivos
-# dados2 <- filter(dados,NU_ANO==2016,
-#                          TP_ST_CONCLUSAO %in% c(1,2),
-#                          SG_UF_RESIDENCIA %in% c('RJ','SP','MG','ES'),
-#                          IN_TREINEIRO==0,
-#                          TP_PRESENCA_LC==1,
-#                          TP_PRESENCA_CH==1)
+dados2 <- filter(dados,NU_ANO==2016,
+                         TP_ST_CONCLUSAO %in% c(1,2),
+                         SG_UF_RESIDENCIA %in% c('RJ','SP','MG','ES'),
+                         IN_TREINEIRO==0,
+                         TP_PRESENCA_LC==1,
+                         TP_PRESENCA_CH==1)
+
+
+dados3 <- select(dados2, TP_COR_RACA, TP_SEXO, TP_ESCOLA, Q005, Q026, Q002, Q006, NU_IDADE,
+                 NU_NOTA_REDACAO, NU_NOTA_CN, NU_NOTA_CH, NU_NOTA_LC, NU_NOTA_MT,Q047, SG_UF_RESIDENCIA)
+
+
+
+dados4 <- rename(dados3,R= NU_NOTA_REDACAO, CNT= NU_NOTA_CN, CHT= NU_NOTA_CH, LCT= NU_NOTA_LC,
+                         MT= NU_NOTA_MT,RACA = TP_COR_RACA,SEXO = TP_SEXO,ESCOLA = TP_ESCOLA,
+                         MORA = Q005,TRAB= Q026,ESCOL_MAE= Q002,IDADE= NU_IDADE,RENDA= Q006, EM=Q047, UF=SG_UF_RESIDENCIA)
+
+dados5 <- mutate(dados4, FORMULA= (2*R + CNT + 2*CHT + LCT + MT)/7)
+
+base <- na.omit(dados5)
 # 
-# 
-# dados3 <- select(dados2, TP_COR_RACA, TP_SEXO, TP_ESCOLA, Q005, Q026, Q002, Q006, NU_IDADE,
-#                  NU_NOTA_REDACAO, NU_NOTA_CN, NU_NOTA_CH, NU_NOTA_LC, NU_NOTA_MT,Q047, SG_UF_RESIDENCIA)
-# 
-# 
-# 
-# dados4 <- rename(dados3,R= NU_NOTA_REDACAO, CNT= NU_NOTA_CN, CHT= NU_NOTA_CH, LCT= NU_NOTA_LC,
-#                          MT= NU_NOTA_MT,RACA = TP_COR_RACA,SEXO = TP_SEXO,ESCOLA = TP_ESCOLA,
-#                          MORA = Q005,TRAB= Q026,ESCOL_MAE= Q002,IDADE= NU_IDADE,RENDA= Q006, EM=Q047, UF=SG_UF_RESIDENCIA)
-# 
-# dados5 <- mutate(dados4, FORMULA= (2*R + CNT + 2*CHT + LCT + MT)/7)
-# 
-# dados6 <- na.omit(dados5)
-# 
-# #base <- collect(dados6)
+# #base <- collect(base)
 
 
 
@@ -70,7 +72,7 @@ base <- spark_read_parquet(sc=sc,path='dados_parquet')
 
 ## Salavando dados tratados para facilitar futuras aberturas do arquivo, e poder compartilhar
 ## com outros integrantes do projeto
-#spark_write_parquet(dados6,file='dados_parquet')
+spark_write_parquet(base,path='dados_parquet')
 ```
 
 ```{r}
@@ -281,6 +283,7 @@ base <- base |>
 ## Ação afirmativa B
 
 base |> 
+  filter(B!="Não concorreu") |>
   count(B) |> 
   ggplot(aes(x=B, y=n)) + 
   geom_bar(stat='identity',
@@ -298,7 +301,8 @@ base |>
 ## Gráfico de contagem segundo situação de aprovação para o Primeiro período na
 ## Ação afirmativa A1
 
-base |> 
+base |>  
+  filter(A1!="Não concorreu") |>
   count(A1) |> 
   ggplot(aes(x=A1, y=n)) + 
   geom_bar(stat='identity',
@@ -311,11 +315,14 @@ base |>
        title="Situação dos candidatos na ação afirmativa A1 no 1º período") + 
   theme_classic() + theme(legend.position = "none", plot.title = element_text(hjust = 0.5, size=14, face="bold"), text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12))
 ```
+
+
 ```{r}
 ## Gráfico de contagem segundo situação de aprovação para o Primeiro período na
 ## Ação afirmativa A2
 
-base |> 
+base |>  
+  filter(A2!="Não concorreu") |>
   count(A2) |> 
   ggplot(aes(x=A2, y=n)) + 
   geom_bar(stat='identity',
@@ -328,11 +335,14 @@ base |>
        title="Situação dos candidatos na ação afirmativa A2 no 1º período") + 
   theme_classic() + theme(legend.position = "none", plot.title = element_text(hjust = 0.5, size=14, face="bold"), text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12))
 ```
+
+
 ```{r}
 ## Gráfico de contagem segundo situação de aprovação para o Primeiro período na
 ## Ação afirmativa A6
 
-base |> 
+base |>  
+  filter(A6!="Não concorreu") |>
   count(A6) |> 
   ggplot(aes(x=A6, y=n)) + 
   geom_bar(stat='identity',
@@ -346,11 +356,13 @@ base |>
   theme_classic() + theme(legend.position = "none", plot.title = element_text(hjust = 0.5, size=14, face="bold"), text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12))
 ```
 
+
 ```{r}
 ## Gráfico de contagem segundo situação de aprovação para o Primeiro período na
 ## Ação afirmativa A7
 
-base |> 
+base |>  
+  filter(A7!="Não concorreu") |>
   count(A7) |> 
   ggplot(aes(x=A7, y=n)) + 
   geom_bar(stat='identity',
@@ -364,69 +376,52 @@ base |>
   theme_classic() + theme(legend.position = "none", plot.title = element_text(hjust = 0.5, size=14, face="bold"), text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12))
 ```
 
-```{r}
-## grafico de barras, em proporção, para raça dos candidatos baseado nos aprovados
 
-
-base |>
-  filter(A1=="Aprovado"|
-           A2=="Aprovado" |
-           A6=="Aprovado"|
-           A7=="Aprovado" | 
-           B=="Aprovado") |> 
-  count(RACA) |> 
-  mutate(prop=n/sum(n)*100,
-         rotulo=paste0(round(prop,2), "%")
-         ,RACA = ifelse(RACA==0,'Não Declarado',
-                        ifelse(RACA==1,'Branco',
-                        ifelse(RACA==2,'Preta',
-                        ifelse(RACA==3,'Parda',
-                        ifelse(RACA==4, 'Amarela',
-                        ifelse(RACA==5,'Indígena','Não dispõe da informação'))))))) |> 
-  ggplot(mapping = aes(x = reorder(RACA, -n),
-                       y = n/sum(n))) +
-  geom_bar(stat = "identity", fill = "Dark green", color = "Black") +
-  geom_text(aes(label = rotulo), 
-            vjust=-0.5) + 
-  scale_y_continuous(breaks = seq(0, 1, .2), 
-                     label = scales::percent) +
-  labs(x = "Raça",y = "Porcentagem",
-       title="Porcentagem de candidatos segundo a raça",
-       subtitle="Dados referentes aos candidatos do ENEM 2016 aprovados em pedagogia na UFF em 2017") + theme_classic() + theme(legend.position = "none", plot.title = element_text(hjust = 0.5, size=14, face="bold"), text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12))
-
-
-```
 
 ```{r}
-## grafico de barras, em proporção, para raça dos candidatos baseado na população geral
+
+#grafico de barras para raça do individuo(população geral)
 
 
 base |> 
-  count(RACA) |> 
-  mutate(prop=n/sum(n)*100,
-         rotulo=paste0(round(prop,2), "%")
-         ,RACA = ifelse(RACA==0,'Não Declarado',
+  mutate(Aprovado= ifelse(B=="Aprovado"| A1=="Aprovado"| A2=="Aprovado"| 
+                          A6=="Aprovado"| A7=="Aprovado", "Aprovado", "Não Aprovado")) |> 
+  group_by(RACA, Aprovado) |> 
+  summarize(n = n()) |> 
+  mutate(pct = n/sum(n), 
+         rotulo = paste0(round(pct*100,0), "%"),
+         RACA = ifelse(RACA==0,'Não Declarado',
                         ifelse(RACA==1,'Branco',
                         ifelse(RACA==2,'Preta',
                         ifelse(RACA==3,'Parda',
                         ifelse(RACA==4, 'Amarela',
                         ifelse(RACA==5,'Indígena','Não dispõe da informação'))))))) |> 
-  ggplot(mapping = aes(x = reorder(RACA, -n),
-                       y = n/sum(n))) +
-  geom_bar(stat = "identity", fill = "Dark green", color = "Black") +
-  geom_text(aes(label = rotulo), 
-            vjust=-0.5) + 
+  arrange(Aprovado) |> 
+  ggplot(mapping = aes(x = RACA,
+                       y = pct,
+                       fill = factor(Aprovado))) +
+  geom_bar(stat = "identity",
+           position = "fill") +
   scale_y_continuous(breaks = seq(0, 1, .2), 
                      label = scales::percent) +
-  labs(x = "Raça",y = "Porcentagem",
-       title="Porcentagem de candidatos segundo a raça",
-       subtitle="Dados referentes aos candidatos do ENEM 2016 aprovados em pedagogia na UFF em 2017") + theme_classic() + theme(legend.position = "none", plot.title = element_text(hjust = 0.5, size=14, face="bold"), text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12))
-
+  geom_text(aes(label = rotulo), 
+            size = 6, 
+            position = position_stack(vjust = 0.5))  +
+  scale_fill_brewer(palette = "Set1") +
+  labs(x = "Raça",
+       y = "Proporção",
+       fill = "Situação de aprovação em pedagogia na UFF em 2017",
+       title="Perfil dos candidatos em relação a raça e situação de aprovação em pedagogia na UFF em 2017",
+       subtitle="Dados referentes aos candidatos do ENEM 2016 (população geral)") + theme_classic() +
+  theme(legend.position = "top")  +
+  theme(plot.title = element_text(hjust = 0.5, size=14, face="bold"),
+        text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12)) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2))
 
 ```
 
 ```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
-#grafico de barras para situação de Situação_B.1alho remunerado e tipo de escola que frequentou o ensino médio(população geral)
+#grafico de barras para o tipo de escola que frequentou(população geral)
 
 
 base |> 
@@ -464,3 +459,182 @@ base |>
   scale_x_discrete(guide = guide_axis(n.dodge = 2))
 
 ```
+
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
+#grafico de barras para escolaridade da mãe(população geral)
+
+
+base |> 
+  mutate(Aprovado= ifelse(B=="Aprovado"| A1=="Aprovado"| A2=="Aprovado"| 
+                          A6=="Aprovado"| A7=="Aprovado", "Aprovado", "Não Aprovado")) |> 
+  group_by(ESCOL_MAE, Aprovado) |> 
+  summarize(n = n()) |> 
+  mutate(pct = n/sum(n), 
+         rotulo = paste0(round(pct*100,0), "%"),
+         ESCOL_MAE= ifelse(ESCOL_MAE=='A',"Sem estudo",
+                        ifelse(ESCOL_MAE=='B',"Até 5º ano do EF\n incompleto",
+                        ifelse(ESCOL_MAE=='C',"Até 9º ano do EF\n incompleto",
+                        ifelse(ESCOL_MAE=='D',"Até EM incompleto",
+                        ifelse(ESCOL_MAE=='E',"Completou o EM,\n mas não completou a Faculdade",
+                        ifelse(ESCOL_MAE=='F',"Completou a Faculdade,\n mas não completou a Pós-graduação",
+                        ifelse(ESCOL_MAE=='G',"Completou a Pós-graduação","Não sei")))))))) |> 
+  arrange(Aprovado) |> 
+  ggplot(mapping = aes(x = ESCOL_MAE,
+                       y = pct,
+                       fill = factor(Aprovado))) +
+  geom_bar(stat = "identity",
+           position = "fill") +
+  scale_y_continuous(breaks = seq(0, 1, .2), 
+                     label = scales::percent) +
+  geom_text(aes(label = rotulo), 
+            size = 6, 
+            position = position_stack(vjust = 0.5))  +
+  scale_fill_brewer(palette = "Set1") +
+  labs(x = "Tipo de escola que frequentou o ensino médio",
+       y = "Proporção",
+       fill = "Situação de aprovação em pedagogia na UFF em 2017",
+       title="Perfil dos candidatos em relação à escolaridade da mãe e situação de aprovação em pedagogia na UFF em 2017",
+       subtitle="Dados referentes aos candidatos do ENEM 2016 (população geral)") + theme_classic() +
+  theme(legend.position = "top")  +
+  theme(plot.title = element_text(hjust = 0.5, size=14, face="bold"),
+        text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12)) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2))
+
+```
+
+```{r fig.align='center', echo=FALSE, message=FALSE, warning=FALSE, fig.width = 14}
+#grafico de pizza para sexo(população geral)
+
+
+base |> 
+  mutate(Aprovado= ifelse(B=="Aprovado"| A1=="Aprovado"| A2=="Aprovado"| 
+                          A6=="Aprovado"| A7=="Aprovado", "Aprovado", "Não Aprovado")) |> 
+  group_by(SEXO, Aprovado) |>  
+  summarise(n = n()) |>  
+  mutate(pct = n/sum(n), 
+         rotulo = paste0(round(pct*100,0), "%"),
+         SEXO = ifelse(SEXO=='M',"Masculino",
+                        'Feminino')) |> 
+  arrange(Aprovado) |> 
+  ggplot(mapping = aes(x = SEXO,
+                       y = pct,
+                       fill = factor(Aprovado))) +
+  geom_bar(stat = "identity",
+           position = "fill") +
+  scale_y_continuous(breaks = seq(0, 1, .2), 
+                     label = scales::percent) +
+  geom_text(aes(label = rotulo), 
+            size = 6, 
+            position = position_stack(vjust = 0.5))  +
+  scale_fill_brewer(palette = "Set1") +
+  labs(x = "Tipo de escola que frequentou o ensino médio",
+       y = "Proporção",
+       fill = "Situação de aprovação em pedagogia na UFF em 2017",
+       title="Perfil dos candidatos em relação ao tipo de escola que frequentou o ensino médio e situação de aprovação em pedagogia na UFF em 2017",
+       subtitle="Dados referentes aos candidatos do ENEM 2016 (população geral)") + theme_classic() +
+  theme(legend.position = "top")  +
+  theme(plot.title = element_text(hjust = 0.5, size=14, face="bold"),
+        text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12)) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2))
+
+```
+
+
+```{r}
+base |> 
+  mutate(Aprovado= ifelse(B=="Aprovado"| A1=="Aprovado"| A2=="Aprovado"| 
+                          A6=="Aprovado"| A7=="Aprovado", "Aprovado", "Não Aprovado"),
+         ESCOL_MAE= ifelse(ESCOL_MAE=='A',"Sem estudo",
+                        ifelse(ESCOL_MAE=='B',"Até 5º ano do EF\n incompleto",
+                        ifelse(ESCOL_MAE=='C',"Até 9º ano do EF\n incompleto",
+                        ifelse(ESCOL_MAE=='D',"Até EM incompleto",
+                        ifelse(ESCOL_MAE=='E',"Completou o EM,\n mas não completou a Faculdade",
+                        ifelse(ESCOL_MAE=='F',"Completou a Faculdade,\n mas não completou a Pós-graduação",
+                        ifelse(ESCOL_MAE=='G',"Completou a Pós-graduação","Não sei")))))))) |> 
+  group_by(ESCOL_MAE, Aprovado) |> 
+  summarise(n = n(),
+         media = mean(MORA),
+         desvio = sd(MORA)) |> 
+  mutate(erro.padrao = desvio / sqrt(n)) |> 
+  ggplot(mapping = aes(x = ESCOL_MAE,
+                       y = media,
+                       group=factor(Aprovado),
+                       color=factor(Aprovado))) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = media - erro.padrao, 
+                    ymax = media + erro.padrao), 
+                width = .1)  +
+  scale_fill_brewer(palette = "Set1") +
+  labs(x='Escolaridade da mãe',
+       y='Média de pessoas na casa',
+       title='Média de pessoas na casa segundo a escolaridade da mãe',
+       subtitle="Dados referentes aos candidatos do ENEM 2016 aprovados em pedagogia na UFF em 2017") +   theme_classic() +
+  theme(legend.position = "top")  +
+  theme(plot.title = element_text(hjust = 0.5, size=14, face="bold"),
+        text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12)) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2))
+
+```
+
+
+
+```{r}
+base |> 
+  mutate(Aprovado= ifelse(B=="Aprovado"| A1=="Aprovado"| A2=="Aprovado"| 
+                          A6=="Aprovado"| A7=="Aprovado", "Aprovado", "Não Aprovado")) |> 
+  group_by(TRAB,Aprovado) |> 
+  summarise(n=n()) |> 
+  mutate(TRAB = ifelse(TRAB=="A","Não, nunca trabalhei",
+                ifelse(TRAB=="B","Sim, já trabalhei, \nmas não estou trabalhando","Sim, estou trabalhando")),
+         pct = n/sum(n), 
+         rotulo = paste0(round(pct*100,0), "%")) |> 
+  ggplot(mapping = aes(y = pct,
+                       x = TRAB,
+                       fill=factor(Aprovado))) +
+  geom_bar(stat = "identity", position="fill") +
+  geom_text(aes(label = rotulo), 
+            size = 6, 
+            position = position_stack(vjust = 0.5))  +
+  scale_fill_brewer(palette = "Set1") +
+  labs(y = "Situação de trabalho remunerado",x = "Frequência",
+       title="Frequência de candidatos segundo a situação de trabalho remunerado",
+       subtitle="Dados referentes aos candidatos do ENEM 2016 aprovados em pedagogia na UFF em 2017") + theme_classic() + theme(legend.position = "none", plot.title = element_text(hjust = 0.5, size=14, face="bold"), text = element_text(size=15), plot.subtitle = element_text(hjust = 0.5, size=12))
+```
+```{r}
+model <- base |> 
+  mutate(Aprovado= ifelse(B=="Aprovado"| A1=="Aprovado"| A2=="Aprovado"| 
+                          A6=="Aprovado"| A7=="Aprovado", "Aprovado", "Não Aprovado"),
+         RACA = ifelse(RACA==0,'ND',
+                        ifelse(RACA==1,'B',
+                        ifelse(RACA==2,'Pr',
+                        ifelse(RACA==3,'Pa',
+                        ifelse(RACA==4, 'A',
+                        ifelse(RACA==5,'I','NDI'))))))) |> 
+  ml_logistic_regression(Aprovado ~ RACA+ SEXO+ MORA+ TRAB+ ESCOL_MAE+ RENDA+ IDADE+ R+ CNT+ CHT+ LCT+ MT+ EM+ UF)
+
+summary(model)
+```
+```{r}
+base <- base |> mutate(Aprovado= ifelse(B=="Aprovado"| A1=="Aprovado"| A2=="Aprovado"| 
+                          A6=="Aprovado"| A7=="Aprovado", "Aprovado", "Não Aprovado"),
+                       RACA = ifelse(RACA==0,'ND',
+                        ifelse(RACA==1,'B',
+                        ifelse(RACA==2,'Pr',
+                        ifelse(RACA==3,'Pa',
+                        ifelse(RACA==4, 'A',
+                        ifelse(RACA==5,'I','NDI')))))))
+base_test <- base |> 
+  sdf_random_split(training = 0.75, test = 0.25, seed = 1099)
+
+model_test <- base_test$training |> 
+  ml_logistic_regression(Aprovado ~ RACA+ SEXO+ MORA+ TRAB+ ESCOL_MAE+ RENDA+ IDADE+ R+ CNT+ CHT+ LCT+ MT+ EM+ UF)
+
+summary(model_test)
+```
+
+```{r}
+
+ml_predict(model_test, base_test$test) |>  
+  count(Aprovado, predicted_label)
+```
+
